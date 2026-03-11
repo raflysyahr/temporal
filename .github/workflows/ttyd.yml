@@ -1,4 +1,4 @@
-name: GitHub VPS (ttyd)
+name: GitHub VPS (ttyd password)
 
 on:
   workflow_dispatch:
@@ -12,13 +12,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y curl nodejs npm
+          sudo apt install -y ttyd curl nodejs npm
 
-      - name: Install ttyd
+      - name: Start Web Terminal (ttyd)
         run: |
-          sudo apt install -y ttyd
+          echo "Starting ttyd..."
+          ttyd -c dev:1234 -W -p 7681 bash &
 
-      - name: Start web terminal
+      - name: Expose Public URL
         run: |
-          ttyd -p 7681 bash &
           npx localtunnel --port 7681
