@@ -1,4 +1,4 @@
-name: GitHub VPS (ttyd password)
+name: GitHub VPS ttyd
 
 on:
   workflow_dispatch:
@@ -9,16 +9,36 @@ jobs:
     timeout-minutes: 360
 
     steps:
-      - name: Install dependencies
+      - name: Install packages
         run: |
           sudo apt update
           sudo apt install -y ttyd curl nodejs npm
 
-      - name: Start Web Terminal (ttyd)
+      - name: Start ttyd terminal
         run: |
           echo "Starting ttyd..."
           ttyd -c dev:1234 -W -p 7681 bash &
 
-      - name: Expose Public URL
+      - name: Start LocalTunnel
         run: |
-          npx localtunnel --port 7681
+          echo "Starting tunnel..."
+          npx localtunnel --port 7681 > tunnel.log 2>&1 &
+          sleep 8
+
+          echo "=============================="
+          echo "🌐 PUBLIC TERMINAL URL:"
+          grep -o 'https://[a-zA-Z0-9.-]*\.loca\.lt' tunnel.log || true
+          echo "=============================="
+
+          echo "🔑 TUNNEL PASSWORD:"
+          curl -s https://loca.lt/mytunnelpassword
+          echo ""
+          echo "=============================="
+
+      - name: Keep VPS Alive
+        run: |
+          echo "VPS running..."
+          while true; do
+            echo "alive $(date)"
+            sleep 60
+          done
