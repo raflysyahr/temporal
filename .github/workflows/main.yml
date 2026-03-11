@@ -1,0 +1,13 @@
+name: Temporary GitHub VPS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  vps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Start tmate session
+        uses: mxschmitt/action-tmate@v3
