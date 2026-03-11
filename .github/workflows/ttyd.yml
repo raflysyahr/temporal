@@ -1,0 +1,24 @@
+name: GitHub VPS (ttyd)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  vps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y curl nodejs npm
+
+      - name: Install ttyd
+        run: |
+          sudo apt install -y ttyd
+
+      - name: Start web terminal
+        run: |
+          ttyd -p 7681 bash &
+          npx localtunnel --port 7681
