@@ -22,7 +22,7 @@ jobs:
       - name: Start LocalTunnel
         run: |
           echo "Starting tunnel..."
-          npx localtunnel --port 7681 > tunnel.log 2>&1 &
+          npx localtunnel --port 7681 --subdomain githubvpsdemo & > tunnel.log 2>&1 &
           sleep 8
 
           echo "=============================="
