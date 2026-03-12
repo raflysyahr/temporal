@@ -1,0 +1,44 @@
+name: Temporary VPS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  vps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Update system
+        run: |
+          sudo apt update
+          sudo apt install -y curl wget git nodejs npm tmux
+
+      - name: Install localtunnel
+        run: |
+          sudo npm install -g localtunnel
+
+      - name: Start example service
+        run: |
+          python3 -m http.server 8080 &
+          echo "HTTP server started"
+
+      - name: Start tunnel
+        run: |
+          lt --port 8080 --subdomain githubvpsdemo &
+          sleep 5
+
+      - name: Show tunnel password
+        run: |
+          curl https://loca.lt/mytunnelpassword
+
+      - name: Keep runner alive
+        run: |
+          echo "Runner aktif sebagai VPS sementara"
+          while true; do
+            echo "Running..."
+            sleep 60
+          done
